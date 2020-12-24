@@ -1,0 +1,21 @@
+[Unit]
+Description="CoreDNS Server"
+Documentation=https://www.coredns.io/
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+LimitNOFILE=1024
+WorkingDirectory=/etc/coredns/
+ExecStart=/usr/bin/coredns -dns.port 53 -conf /etc/coredns/Corefile
+ExecReload=/bin/kill --signal HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartSec=5
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target
